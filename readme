@@ -1,0 +1,123 @@
+Lý thuyết react nâng cao: 
+I. Hook
+1. useState
+    - Để quản lý trạng thái cục bộ, giúp component nhớ dữ liệu và cập nhật lại giao diện khi dữ liệu thay đổi
+    - Cú pháp: 
+        const [state, setState] = useState(initialValue)
+        + initialValue: là giá trị bạn đầu
+         Số (0)
+         Mảng ([])
+         Input ('')
+         Object ([{}])
+
+2. useEffect
+    - Dùng để xử lý side effect trong function component 
+        + side effect là những việc xảy ra ngoài việc render UI
+         Call API
+         Thao tác DOM
+         Lắng nghe sự kiện(event listener)
+         Set timeout/interval
+         Đồng bộ dữ liệu với localStorage
+    - Cú pháp
+    useEffect(() => {
+        return () => {
+        }
+    }, [dependency])
+    + callback: hàm chứa side-effect
+    + dependencies: mảng các giá trị mà khi thay đổi → effect chạy lại
+    
+    useEffect(() => {
+        fetch("api")
+            .then(res => res.json())
+            .then(data => setTodos(data)) 
+        }
+    }, [])
+
+    - Mảng dependencies chạy khi: 
+    useEffect(callback): Mỗi lần render
+    useEffect(callback, []): chỉ một lần khi mount
+    useEffect(callback, [a, b]): khi a hoặc b thay đổi
+    Cleanup(return () => {}): Khi unmount hoặc effect chạy lại 
+        Mount là khoảnh khắc component được tạo ra 
+        Unmount là khoảnh khắc component bị biến mất
+
+3. useRef là một React hook tạo ra thuộc tính .current
+    - Giá trị trong ref.current không làm component re-render khi thay đổi
+    - useRef dùng để lưu các giá trị qua nhiều render mà không mất dữ liệu
+    - Cách dùng useRef: 
+        Dùng như document.getElementById
+        Lưu giá trị mà không gây re-render
+        Lưu previous value(giá trị trước đó)
+        Lưu timer(setInterval)
+    - Cú pháp 
+        const myRef = useRef(initialValue)
+        current: initialValue
+        gọi: myRef.current 
+
+4. useMemo là một React hook dùng để ghi nhớ (memoize) kết quả của một phép tính tốn kém để tránh
+tính lại không cần thiết mỗi lần giao diện re-render
+    - nó giúp tôi ưu performance
+    - Dùng useMemo khi 
+        có phép tính nặng(sort, loop lớn, tính toán phức tạp)
+        Có object/array truyền xuống component con(tránh render lại không cần thiết)
+        Do mình có nhu cầu giảm số lần tính lại một giá trị dựa trên state/props
+    - Cú pháp
+        const memoValue = useMemo(() => {
+        return value
+        }, [dependencies])
+        Chỉ tính lại khi dependencies thay đổi
+
+5. useCallback là một React hook dùng để ghi nhớ một hàm, giúp không tạo lại hàm mới khi component
+thay đổi
+    - Dùng useCallback để: 
+        Tránh component con re-render mà không cần thiết
+        Giữ hàm ổn định khi truyền vào
+        Giảm chi phí khi callback được tạo lại liên tục
+
+    - Cú pháp
+        const memoizedCallback = useCallback(() => {
+            do something
+        }, [dependencies])
+        React chỉ tạo lại hàm mới khi dependencies thay đổi
+
+II. Lifecycle component
+                ┌───────────────────────────────┐
+                │     COMPONENT MOUNT (xuất hiện)│
+                └───────────────────────────────┘
+                                │
+                                ▼
+                    Render lần đầu (initial render)
+                                │
+                                ▼
+                  useEffect(() => {...}, []) 
+                        (chạy 1 lần)
+                → Thường dùng: fetch API, add event listener
+                                │
+                                ▼
+          ┌─────────────────────────────────────────────────┐
+          │                UPDATE PHASE                     │
+          └─────────────────────────────────────────────────┘
+                                │
+                Mỗi lần State / Props thay đổi → Re-render
+                                │
+                                ▼
+                  useEffect(() => {...}, [deps])
+               (chạy mỗi khi deps thay đổi)
+                                │
+                                ▼
+     ┌──────────────────────────────────────────────────────────┐
+     │ Nếu deps thay đổi → chạy cleanup của effect trước đó     │
+     │   return () => { ... cleanup ... }                       │
+     └──────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+          ┌─────────────────────────────────────────────────┐
+          │           COMPONENT UNMOUNT (biến mất)          │
+          └─────────────────────────────────────────────────┘
+                                │
+                                ▼
+          useEffect(() => {...}, []) cleanup chạy:
+                 return () => { ... }
+ → Remove event listener, clear interval, disconnect websocket
+
+
