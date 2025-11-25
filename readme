@@ -120,4 +120,36 @@ II. Lifecycle component
                  return () => { ... }
  → Remove event listener, clear interval, disconnect websocket
 
+III. React Router DOM là một thư viện giúp Routing(điều hướng trang) trong ứng dụng react
+    - Nó giúp chuyển trang không bị reload lại toàn bộ website
+        Tạo SPA(Single page application)
+        Mỗi Url tương ứng với một component
+        Điều hướng bằng code (useNavigate) hoặc thẻ Link
+    - Dùng để
+        Tạo nhiều trang
+        Điều hướng khi người dùng click link hoặc các button chuyển trang
+        Sinh url tự động 
+        Bảo về route (Phân quyền)
+    - Cách dùng
+        + Cài đặt : npm install react-router-dom
+        + Cấu hình cho router: 
+            ReactDOM.createRoot(document.getElementById("root")).render(
+                <BrowserRouter>
+                    <App />
+                </BrowserRouter>
+            )
+            Bọc bằng thẻ <BrowserRouter> trong main.tsx
+    - Link dùng khi: 
+        Người dùng click chuyển trang
+        Điều hướng xuất hiện trong UI(button, menu, ...)
+        Bạn muốn SEO tốt hơn (Link tạo thẻ a thật trong DOM)
+    - useNavigate dùng khi: 
+        Cần chuyển trang bằng code không cần click
+        const navigate = useNavigate()
 
+IV. Controlled, Uncontrolled, Formik/yup
+1. Controlled component: là Form được react kiểm soát qua state(useState)
+Mỗi lần gõ thì state thay đổi và giao diện cũng thay đổi theo
+
+2. Uncontrolled components: là Form không dùng state mà dùng ref(useRef) 
+để lấy giá trị khi submit
