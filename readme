@@ -153,3 +153,60 @@ Mỗi lần gõ thì state thay đổi và giao diện cũng thay đổi theo
 
 2. Uncontrolled components: là Form không dùng state mà dùng ref(useRef) 
 để lấy giá trị khi submit
+
+V. React Formik/yup
+- Yup là thư viện validate 
+- Formik là một thư viện giúp quản lý form tốt trong react dễ hơn rất nhiều sơ với useState 
+- Formik giúp xử lý: 
+    Quản lý state của form
+    Validate
+    Xử lý submit
+    Hiển thị lỗi 
+    Làm việc tốt với yup(thư viện validate)
+- Cách formik hoạt động: 
+    Formik sử dụng mô hình
+        + initialValues: giá trị khởi tạo 
+        + handleChange: cập nhật value khi nhập 
+        + handleSubmit: Xử lý submit 
+        + error + touched: Quản lý lỗi và hiển thị lỗi
+        + Dùng yup để validate form
+        * Bên trong formik có một state riêng để theo dõi dữ liệu của form, không cần tạo useState thủ công
+    * Khi dùng <Formik/>
+        + Nó sẽ tạo một state để lưu 
+            values: { name: "", email: "" }
+            errors: {}
+            touched: {}
+        + Khi gõ vào Field
+            Formik sẽ tự động  
+                lấy giá trị mới
+                Cập nhật state value
+                validate bằng Yup 
+                Nếu sai -> cập nhật error
+                Nếu blur input -> cập nhật touched
+        + Khi click submit
+            Formik gọi validationSchema
+            Nếu có lỗi -> không submit 
+            Nếu không lỗi -> gọi onSubmit(values)
+- Cách dùng formik 
+    + Cài đặt: npm install formik yup
+
+VI. Redux cơ bản
+Redux là một thư viện quản lý state toàn cục cho ứng dụng JavaScript
+    - Giúp quản lý state phức tạp
+    - Dữ liệu được lưu trữ tập trung trong store
+    - Dữ liệu trong store có thể được truy cập từ bất kỳ component nào 
+    - Dữ liệu trong store chỉ có thể được thay đổi thông qua actions và reducers
+    -Redux phù hợp với các ứng dụng lơn, có nhiều component cần chia sẻ dữ liệu
+    - Redux giúp tách biệt logic quản lý state khỏi UI, làm code dễ bảo trì hơn
+- Cách dùng Redux
+    + Cài đặt: npm install redux react-redux @reduxjs/toolkit
+    + Tạo store: Nơi lưu trữ state toàn cục
+    + Tạo slice: Chứa reducers và actions
+    + Cung cập store cho ứng dụng bằng <Provider>
+    + Sử dụng useSelector để lấy state từ store
+    + Sử dụng useDispatch để gửi actions thay đổi state
+
+- Redux có 3 phần chính
+    + Store: Nơi lưu trũ state tonaf cục ứng dụng
+    + Actions: Đối tượng mô tả hành động thay đổi state
+    + Reducers: Hàm nhận staet hiện tại và action để trả về state mới
